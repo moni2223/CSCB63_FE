@@ -1,0 +1,32 @@
+.login-verification-conatiner {
+  width: 100%;
+  align-items: center;
+  text-align: center;
+  .code-container {
+    padding: 15px 0;
+    .code-conatiner-inner {
+      justify-content: space-around;
+      padding: 25px 0;
+      .digit-container {
+        border: none;
+        border-radius: 6px;
+        min-width: 70px;
+        min-height: 70px;
+        margin: 0 10px;
+        text-align: center;
+        font-size: 22px;
+        font-weight: 700;
+        border: 1px solid rgb(163, 163, 163);
+        transition: 0.2s linear;
+        &.invalid {
+          border: 1px solid rgb(219, 50, 50);
+          color: rgb(219, 50, 50);
+        }
+        &.valid {
+          border: 1px solid rgb(30, 189, 30);
+          color: rgb(30, 189, 30);
+        }
+      }
+    }
+  }
+}

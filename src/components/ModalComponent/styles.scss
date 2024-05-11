@@ -1,0 +1,118 @@
+@import "../../App.scss";
+.modal-component {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0, 0, 0, 0.7);
+  // border-radius: 7px;
+  z-index: 997;
+  &.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  &.right {
+    justify-content: flex-end;
+  }
+  &.left {
+    justify-content: flex-start;
+  }
+}
+.delete-modal-container {
+  .wrapper-for-array {
+    @include remove-scrollbars;
+    @apply h-[50vh] overflow-y-scroll;
+  }
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  border-radius: 7px;
+}
+.close-icon {
+  background-image: url("../../assets/icons/close.svg");
+  width: 15px;
+  height: 15px;
+  background-size: cover;
+  cursor: pointer;
+}
+
+.classification-container {
+  width: 93%;
+  background-color: #e6edff;
+  height: 40px;
+  font-size: 0.85rem;
+  padding-left: 1%;
+  border-radius: 7px;
+  &.selected {
+    background-color: red;
+    color: white;
+  }
+}
+
+.radio-outer-circle {
+  border: 1px solid black;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 1%;
+  cursor: pointer;
+  .radio-inner-circle {
+    border: 1px solid black;
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    display: none;
+    &.selected {
+      display: block;
+      background-color: #0046f8;
+    }
+  }
+}
+
+.empty-document-container {
+  background-image: url("../../assets/images/Empty-state.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 40%;
+  height: 40%;
+  margin: 1% 0%;
+}
+
+.upload-button-container {
+  padding: 1vw;
+  background-color: #e6edff;
+  border-radius: 7px;
+}
+
+.view-image-container {
+  @apply w-full h-full text-white p-1 flex flex-col;
+}
+
+.image-settings-popUp-content {
+  -webkit-animation: anvil 0.2s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards;
+  z-index: 999 !important;
+  position: relative;
+  width: 300px !important;
+}
+
+.slider-container {
+  width: 100%;
+  // box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3); /* Shadow at the top */
+  box-sizing: border-box;
+  .slider-wrapper {
+    display: flex;
+    overflow-x: auto; /* Allows for horizontal scrolling */
+    scroll-snap-type: x mandatory; /* Snaps the scrolling to each image */
+  }
+  .slider-wrapper::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for webkit browsers */
+  }
+}

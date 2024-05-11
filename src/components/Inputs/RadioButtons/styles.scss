@@ -1,0 +1,25 @@
+.checkboxes-container {
+  display: flex;
+  &.column {
+    flex-direction: column;
+  }
+  .checkbox-container {
+    display: flex;
+    margin-right: 20px;
+    align-items: center;
+    &.column {
+      margin: 5px 0px;
+    }
+    .outer-square {
+      cursor: pointer;
+    }
+  }
+}
+.tick {
+  @apply w-4 h-4 rounded-half bg-contain bg-no-repeat;
+  display: none;
+  background-image: url("../../../assets/icons/checkbox-tick.svg");
+  &.selected {
+    display: block;
+  }
+}

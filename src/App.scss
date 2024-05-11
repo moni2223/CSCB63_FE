@@ -1,0 +1,116 @@
+.icon {
+  @apply w-7 h-7 cursor-pointer bg-no-repeat bg-contain bg-center;
+  &.see-password {
+    background-image: url("./assets/icons/see-password.svg");
+  }
+  &.edit-icon {
+    background-image: url("./assets/icons/edit-icon.svg");
+  }
+  &.profile-picture {
+    background-image: url("./assets/icons/profile-picture.svg");
+  }
+  &.document {
+    background-image: url("./assets/icons/document.svg");
+  }
+  &.close {
+    background-image: url("./assets/icons/close-icon.svg");
+  }
+  &.date {
+    background-image: url("./assets/icons/date-icon.svg");
+  }
+  &.logout {
+    background-image: url("./assets/icons/log-out.svg");
+  }
+  &.download {
+    background-image: url("./assets/icons/download-icon.svg");
+  }
+  &.edit {
+    background-image: url("./assets/icons/edit-icon.svg");
+  }
+  &.manual {
+    background-image: url("./assets/icons/manual.svg");
+  }
+  &.sms {
+    background-image: url("./assets/icons/sms-icon.svg");
+  }
+  &.info {
+    background-image: url("./assets/icons/info-icon.svg");
+  }
+}
+
+.main-container {
+  @apply p-6 w-full;
+  &.background {
+    background-size: 98% 100% !important;
+    background-repeat: no-repeat;
+    background-position: top 20px center;
+    @apply rounded-md;
+  }
+  .inner-header-container {
+    @apply flex items-center w-full h-1/12 rounded-md pl-2 shadow-md;
+    &.over-image {
+      height: 7vh !important;
+    }
+    .left-part {
+      @apply flex h-full items-center w-[97%];
+      .inner-title {
+        @apply text-base ml-2 uppercase font-semibold whitespace-nowrap;
+      }
+    }
+  }
+  .body-container {
+    @apply h-9/10 mt-1 rounded-md p-6 shadow-md;
+    .inner-title {
+      @apply text-base ml-2 uppercase font-semibold whitespace-nowrap;
+    }
+    &.body-map {
+      padding: 0px;
+      box-shadow: none;
+      margin-top: 0%;
+    }
+    &.row {
+      display: flex;
+    }
+    &.full-height {
+      height: 100%;
+    }
+    &.white {
+      @apply bg-white;
+    }
+    margin-top: 15px;
+  }
+  .body-container:nth-child(1) {
+    margin-top: 0px;
+  }
+}
+.shadow-main {
+  box-shadow: 0 4px 10px rgba(14, 24, 51, 0.15);
+}
+
+.divider {
+  @apply w-full bg-[#15DD95] my-3 rounded-md;
+  height: 1px;
+  &.vertical {
+    @apply h-full mx-3;
+    width: 1px;
+  }
+}
+@mixin remove-scrollbars {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}

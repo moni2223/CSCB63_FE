@@ -1,0 +1,21 @@
+.button-container {
+  &.disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+  &.selected {
+    @apply bg-primary border-none text-white shadow-none;
+  }
+  &.green-selected {
+    @apply bg-[#15DD95] border-none text-white shadow-none;
+  }
+  &.cancel {
+    @apply bg-[#e80111] border-[#e80111] text-white shadow-none;
+  }
+  &.delete {
+    border: 1px solid #e80111;
+  }
+  &.transparent {
+    @apply bg-transparent text-black shadow-none border border-[#002C78];
+  }
+}

@@ -1,0 +1,54 @@
+#articlesScrollbar {
+  height: 91.25% !important;
+}
+
+.header-cont:first-child {
+  margin-left: 1%;
+  &.bigger {
+    justify-content: flex-start;
+    width: 12%;
+  }
+}
+.header-cont:nth-child(2) {
+  justify-content: flex-start;
+}
+
+.table-body-row {
+  @apply w-[99%] h-14 mt-4 flex rounded-md items-center shadow-lg;
+  .row-data {
+    @apply w-1/10 h-10 mt-1 flex items-center pl-3 text-sm border-r font-medium;
+    &.higher {
+      @apply h-14 mt-0 text-sm text-[14px];
+    }
+  }
+  .row-data:first-child {
+    cursor: pointer;
+    padding-left: 13px;
+  }
+  .row-data:last-child {
+    border-right: none;
+  }
+  &.higher {
+    @apply h-24;
+  }
+}
+
+.insurances-settings-popUp-content {
+  -webkit-animation: anvil 0.2s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards !important;
+  width: 200px !important;
+}
+.verification-settings-popUp-content {
+  -webkit-animation: anvil 0.2s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards !important;
+  width: 250px !important;
+  background-color: #eaedfe !important;
+}
+.verification-bigger-settings-popUp-content {
+  -webkit-animation: anvil 0.2s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards !important;
+  width: 320px !important;
+  background-color: #eaedfe !important;
+}
+.age-warning-popUp-content {
+  -webkit-animation: anvil 0.2s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards !important;
+  width: 520px !important;
+  font-size: 14px;
+}
