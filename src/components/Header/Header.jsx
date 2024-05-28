@@ -35,20 +35,20 @@ const Header = ({}) => {
             </div>
           </div>
         </div>
-        <Popup trigger={<div className="my-profile-picture w-12 h-12 mr-3" />} className="header-popUp" position="bottom right">
+        <Popup trigger={<div className="my-profile-picture w-12 h-12 mr-3 cursor-pointer" />} className="header-popUp" position="bottom right">
           {(close) => {
             return (
               <div className="flex flex-col items-center w-full h-full p-2 gap-4">
-                <h1 className="inner-title font-bold mt-4">{User.getUser()?.fullName}</h1>
+                <h1 className="inner-title font-bold mt-4">{User.getUser()?.fullName || "Test testov"}</h1>
                 <div className="header-option shadow-md">
                   <div className="flex w-full items-center justify-between px-3">
-                    <p className="text-sm font-medium">Редактирай училище (admin/direktor)</p>
+                    <p className="text-sm font-medium">Редактирай училище </p>
                     <div className="icon edit w-6 h-6" onClick={() => navigate("/edit-user")} />
                   </div>
                 </div>
                 <div className="header-option shadow-md">
                   <div className="flex w-full items-center justify-between px-3">
-                    <p className="text-sm font-medium">Редактирай класове (admin/direktor)</p>
+                    <p className="text-sm font-medium">Редактирай класове</p>
                     <div className="icon edit w-6 h-6" onClick={() => navigate("/edit-user")} />
                   </div>
                 </div>
