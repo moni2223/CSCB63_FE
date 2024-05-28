@@ -1,0 +1,19 @@
+.student-info-container {
+  @apply w-full flex items-center justify-center p-2 bg-blue-400 rounded-md text-white font-semibold;
+}
+.statistics-container {
+  @apply h-60 w-1/5 flex flex-col justify-center items-end p-2 text-white rounded-md;
+  &.blue {
+    @apply from-blue-300 to-blue-500 #{!important};
+  }
+  &.green {
+    @apply from-green-200 to-green-400 #{!important};
+  }
+  &.red {
+    @apply from-red-200 to-red-400 #{!important};
+  }
+}
+
+.bg-gradient-diagonal {
+  background: linear-gradient(45deg, #2563eb, #2563eb);
+}

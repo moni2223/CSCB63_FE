@@ -3,9 +3,11 @@ import { User } from "../../utilities/User";
 import Login from "../../screens/Login";
 import LoaderGlobal from "../LoaderGlobal";
 import Header from "../Header/Header";
+import Home from "../../screens/Home";
+import References from "../../screens/References";
 
 function PrivateRoute({ children }) {
-  if (!User.isAuthenticated) return <Navigate to="/login" replace />;
+  // if (!User.isAuthenticated) return <Navigate to="/login" replace />;
   return children;
 }
 
@@ -15,28 +17,28 @@ function AuthRoute({ children }) {
   return children;
 }
 const RoutesCamp = () => {
-  // const privateRoutes = [
-  //   {
-  //     path: "/",
-  //     element: (
-  //       <PrivateRoute>
-  //         {" "}
-  //         <Insurances />
-  //       </PrivateRoute>
-  //     ),
-  //   },
-  //   {
-  //     path: "/add-insurance",
-  //     element: (
-  //       <PrivateRoute>
-  //         <AddInsurance />
-  //       </PrivateRoute>
-  //     ),
-  //   },
-  // ];
+  const privateRoutes = [
+    {
+      path: "/",
+      element: (
+        <PrivateRoute>
+          <Home />
+        </PrivateRoute>
+      ),
+    },
+    {
+      path: "/references",
+      element: (
+        <PrivateRoute>
+          <References />
+        </PrivateRoute>
+      ),
+    },
+  ];
   return (
     <>
-      {User.isAuthenticated && !location.pathname.includes("/login") && <Header />}
+      {/* {User.isAuthenticated && !location.pathname.includes("/login") && <Header />} */}
+      {!location.pathname.includes("/login") && <Header />}
       <Routes>
         <Route
           path="/login"
@@ -46,9 +48,9 @@ const RoutesCamp = () => {
             </AuthRoute>
           }
         />
-        {/* {privateRoutes.map(({ path, element }) => (
+        {privateRoutes.map(({ path, element }) => (
           <Route key={path} path={path} element={element} />
-        ))} */}
+        ))}
       </Routes>
       <LoaderGlobal />
     </>

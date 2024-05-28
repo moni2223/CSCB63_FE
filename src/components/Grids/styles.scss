@@ -1,7 +1,10 @@
 #articlesScrollbar {
   height: 91.25% !important;
 }
-
+#articlesScrollbar-wider {
+  height: 100% !important;
+  width: 125% !important;
+}
 .header-cont:first-child {
   margin-left: 1%;
   &.bigger {
@@ -14,9 +17,9 @@
 }
 
 .table-body-row {
-  @apply w-[99%] h-14 mt-4 flex rounded-md items-center shadow-lg;
+  @apply w-[99%] h-14 mt-4 flex rounded-md items-center border border-solid border-[#5a678556];
   .row-data {
-    @apply w-1/10 h-10 mt-1 flex items-center pl-3 text-sm border-r font-medium;
+    @apply w-1/10 h-10 mt-1 flex items-center pl-3 text-sm border-r font-medium border-[#5a678556];
     &.higher {
       @apply h-14 mt-0 text-sm text-[14px];
     }
@@ -33,22 +36,14 @@
   }
 }
 
-.insurances-settings-popUp-content {
-  -webkit-animation: anvil 0.2s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards !important;
-  width: 200px !important;
+.info-popUp-content {
+  border: 1px solid black !important;
+  width: 300px !important;
+  height: unset !important;
+  background-color: white !important;
+  z-index: 999 !important;
+  -webkit-animation: anvil 0.2s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards;
 }
-.verification-settings-popUp-content {
+.anvil-content {
   -webkit-animation: anvil 0.2s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards !important;
-  width: 250px !important;
-  background-color: #eaedfe !important;
-}
-.verification-bigger-settings-popUp-content {
-  -webkit-animation: anvil 0.2s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards !important;
-  width: 320px !important;
-  background-color: #eaedfe !important;
-}
-.age-warning-popUp-content {
-  -webkit-animation: anvil 0.2s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards !important;
-  width: 520px !important;
-  font-size: 14px;
 }

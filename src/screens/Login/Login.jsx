@@ -28,8 +28,7 @@ const Login = ({}) => {
   }, [errors]);
 
   const handleContinueButton = handleSubmit((e) => {
-    if (!requestCode) handleRequestCode(e);
-    else handleSendCode(e);
+    //TO-DO login action
   });
 
   return (
