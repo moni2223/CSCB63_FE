@@ -25,7 +25,7 @@ const Header = ({}) => {
               <div className={`text-center font-medium w-full whitespace-nowrap text-sm header-inner-element  ${location === "/" ? "selected" : null}`}>Дневник</div>
             </div>
             <div className={`flex w-1/5 justify-center items-center h-full text-black cursor-pointer header-element ${location === "/references" && "selected"}`} onClick={() => navigate("/references")}>
-              <div className={`text-center font-medium w-full whitespace-nowrap text-sm header-inner-element  $${location === "/references" && "selected"}`}>Справки</div>
+              <div className={`text-center font-medium w-full whitespace-nowrap text-sm header-inner-element  ${location === "/references" && "selected"}`}>Справки</div>
             </div>
             <div className={`flex w-1/5 justify-center items-center h-full text-black cursor-pointer header-element ${location.includes("/careers") || location?.includes("career") ? "selected" : null}`} onClick={() => navigate("/careers")}>
               <div className={`text-center font-medium text-sm w-full whitespace-nowrap header-inner-element ${location.includes("/careers") || location?.includes("career") ? "selected" : null}`}>Ръководство</div>
