@@ -12,7 +12,7 @@ const Header = ({}) => {
   const location = useLocation().pathname;
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const { profile, user } = useSelector(({ general }) => general);
   return (
     <>
       <div className="flex h-1/10 pt-2 justify-between items-center rounded-md shadow-md">
@@ -38,30 +38,46 @@ const Header = ({}) => {
         <Popup trigger={<div className="my-profile-picture w-12 h-12 mr-3 cursor-pointer" />} className="header-popUp" position="bottom right">
           {(close) => {
             return (
-              <div className="flex flex-col items-center w-full h-full p-2 gap-4">
-                <h1 className="inner-title font-bold mt-4">{User.getUser()?.fullName || "Test testov"}</h1>
-                <div className="header-option shadow-md">
-                  <div className="flex w-full items-center justify-between px-3">
-                    <p className="text-sm font-medium">Редактирай училище </p>
-                    <div className="icon edit w-6 h-6" onClick={() => navigate("/edit-user")} />
-                  </div>
+              <div className="flex flex-col items-center w-full h-full p-2 gap-3">
+                <h1 className="inner-title font-bold text-lg mt-4 capitalize">{profile?.school?.name}</h1>
+                <h1 className="inner-title font-bold capitalize">
+                  {profile?.name || User.getUser()?.fullName || "Test testov"} - {user?.role?.name}
+                </h1>
+                <div className="flex items-center w-full gap-2 justify-center">
+                  <p className="text-xs underline">Email: </p>
+                  <p className="font-medium text-xs">{profile?.email || User.getUser()?.email}</p>
                 </div>
-                <div className="header-option shadow-md">
-                  <div className="flex w-full items-center justify-between px-3">
-                    <p className="text-sm font-medium">Редактирай класове</p>
-                    <div className="icon edit w-6 h-6" onClick={() => navigate("/edit-user")} />
-                  </div>
+                <div className="flex items-center w-full gap-2 justify-center">
+                  <p className="text-xs underline">Phone number: </p>
+                  <p className="font-medium text-xs">+359 {profile?.number || User.getUser()?.number}</p>
                 </div>
-                <div className="header-option shadow-md">
+
+                {["Principle", "Admin"].includes(profile?.role?.name) && (
+                  <>
+                    <div className="header-option shadow-md">
+                      <div className="flex w-full items-center justify-between px-3">
+                        <p className="text-sm font-medium">Редактирай училище </p>
+                        <div className="icon edit w-6 h-6" onClick={() => navigate("/edit-user")} />
+                      </div>
+                    </div>
+                    <div className="header-option shadow-md">
+                      <div className="flex w-full items-center justify-between px-3">
+                        <p className="text-sm font-medium">Редактирай класове</p>
+                        <div className="icon edit w-6 h-6" onClick={() => navigate("/edit-user")} />
+                      </div>
+                    </div>
+                  </>
+                )}
+                <div className="header-option shadow-md" onClick={() => navigate("/edit-user")}>
                   <div className="flex w-full items-center justify-between px-3">
                     <p className="text-sm font-medium">Редактирай профил</p>
-                    <div className="icon edit w-6 h-6" onClick={() => navigate("/edit-user")} />
+                    <div className="icon edit w-6 h-6" />
                   </div>
                 </div>
-                <div className="header-option shadow-md">
+                <div className="header-option shadow-md" onClick={() => dispatch(logoutUser())}>
                   <div className="flex w-full items-center justify-between px-3">
                     <p className="text-sm font-medium">Излез</p>
-                    <div className="icon logout w-6 h-6" onClick={() => dispatch(logoutUser())} />
+                    <div className="icon logout w-6 h-6" />
                   </div>
                 </div>
               </div>

@@ -14,7 +14,7 @@ const TextInput = forwardRef(({ outerStyle, outerClassName, inputClassName, inpu
 
       <div className={`flex items-center rounded-md h-10 w-full prefix-input-container bg-white ${disabled && "disabled"} ${inputClassName}`} style={inputStyle}>
         {prefix && prefix}
-        <input className={`border-none outline-none text-base px-2  h-[90%] w-full rounded-md ${pointer && "cursor-pointer"} ${selectedInput && "bg-[#BFFFE9]"} ${bold && "font-bold"}`} type={type || "text"} id={type === "password" && "input"} disabled={disabled} {...props} ref={ref} />
+        <input className={`border-none outline-none text-base px-2  h-[90%] w-full rounded-md ${pointer && "cursor-pointer"} ${selectedInput && "bg-[#BFFFE9]"} ${bold && "font-bold"}`} type={type || "text"} disabled={disabled} {...props} ref={ref} />
         <div className="font-bold whitespace-nowrap">{suffix && suffix}</div>
       </div>
     </div>

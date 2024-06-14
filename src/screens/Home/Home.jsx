@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import "./styles.scss";
 import constants from "../../config/constants";
+import "./styles.scss";
 
 const Home = ({}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { profile, user } = useSelector(({ general }) => general);
 
   return (
     <div className="main-container" style={{ height: "92.5vh" }}>
       <div className="body-container !h-full">
-        <div className="student-info-container">Име на ученик - Клас / Име на учител - клас - предмет / Име на директор / Име на админ</div>
+        <div className="student-info-container">{profile?.name} - Клас / Име на учител - клас - предмет / Име на директор / Име на админ</div>
         <div className="w-full flex items-center gap-4 mt-4">
           {constants.statisticsTypes.map(({ label, value, color }) => (
             <div className={`statistics-container bg-gradient-to-r ${color}`}>

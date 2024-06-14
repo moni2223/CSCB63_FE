@@ -8,11 +8,7 @@ const httpClient = axios.create({ baseURL: API_URL });
 
 httpClient.interceptors.request.use(
   async (config) => {
-    const tokenStorage = localStorage.getItem("fantasticoToken") ?? "";
-    config.headers = {
-      ...(tokenStorage && { Authorization: `Bearer ${tokenStorage}` }),
-      "X-Platform": "web",
-    };
+    config.headers = {};
     return config;
   },
   (error) => {

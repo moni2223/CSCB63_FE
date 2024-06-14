@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 
 export const loginValidations = Yup.object().shape({
-  userName: Yup.string().required().min(3).label("userName"),
+  username: Yup.string().required().min(3).label("username"),
   password: Yup.string().required().min(3).label("password"),
 });
 

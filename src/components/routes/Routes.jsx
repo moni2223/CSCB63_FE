@@ -7,7 +7,7 @@ import Home from "../../screens/Home";
 import References from "../../screens/References";
 
 function PrivateRoute({ children }) {
-  // if (!User.isAuthenticated) return <Navigate to="/login" replace />;
+  if (!User.isAuthenticated) return <Navigate to="/login" replace />;
   return children;
 }
 
@@ -37,8 +37,7 @@ const RoutesCamp = () => {
   ];
   return (
     <>
-      {/* {User.isAuthenticated && !location.pathname.includes("/login") && <Header />} */}
-      {!location.pathname.includes("/login") && <Header />}
+      {User.isAuthenticated && <Header />}
       <Routes>
         <Route
           path="/login"
