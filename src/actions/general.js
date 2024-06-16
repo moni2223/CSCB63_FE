@@ -30,6 +30,9 @@ export const getProfile = (user, role) => async (dispatch) => {
   } else if (role?.name === "Parent") {
     profile = await httpClient.get(`/parents/getParentByEmail/${user?.email}`);
     dispatch(setProfile(profile?.data));
+  } else if (role?.name === "Teacher") {
+    profile = await httpClient.get(`teachers/getTeacherByEmail/${user?.email}`);
+    dispatch(setProfile(profile?.data?.[0]));
   }
 };
 

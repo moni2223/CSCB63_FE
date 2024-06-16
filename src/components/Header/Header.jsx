@@ -27,11 +27,11 @@ const Header = ({}) => {
             <div className={`flex w-1/5 justify-center items-center h-full text-black cursor-pointer header-element ${location === "/references" && "selected"}`} onClick={() => navigate("/references")}>
               <div className={`text-center font-medium w-full whitespace-nowrap text-sm header-inner-element  ${location === "/references" && "selected"}`}>Справки</div>
             </div>
-            <div className={`flex w-1/5 justify-center items-center h-full text-black cursor-pointer header-element ${location.includes("/careers") || location?.includes("career") ? "selected" : null}`} onClick={() => navigate("/careers")}>
+            {/* <div className={`flex w-1/5 justify-center items-center h-full text-black cursor-pointer header-element ${location.includes("/careers") || location?.includes("career") ? "selected" : null}`} onClick={() => navigate("/careers")}>
               <div className={`text-center font-medium text-sm w-full whitespace-nowrap header-inner-element ${location.includes("/careers") || location?.includes("career") ? "selected" : null}`}>Ръководство</div>
-            </div>
+            </div> */}
             <div className={`flex w-1/5 justify-center items-center h-full text-black cursor-pointer header-element ${location.includes("/classmates") ? "selected" : null}`} onClick={() => navigate("/classmates")}>
-              <div className={`text-center font-medium text-sm w-full whitespace-nowrap header-inner-element ${location.includes("/classmates") ? "selected" : null}`}>Съученици</div>
+              <div className={`text-center font-medium text-sm w-full whitespace-nowrap header-inner-element ${location.includes("/classmates") ? "selected" : null}`}>{["Teacher", "Principle"].includes(user?.role?.name) ? "Ученици" : "Съученици"}</div>
             </div>
           </div>
         </div>
@@ -51,7 +51,6 @@ const Header = ({}) => {
                   <p className="text-xs underline">Phone number: </p>
                   <p className="font-medium text-xs">+359 {profile?.number || User.getUser()?.number}</p>
                 </div>
-
                 {["Principle", "Admin"].includes(profile?.role?.name) && (
                   <>
                     <div className="header-option shadow-md">

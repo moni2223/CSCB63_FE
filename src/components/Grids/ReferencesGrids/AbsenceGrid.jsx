@@ -22,33 +22,22 @@ const headerElements = [
   },
   {
     name: "Неуважителни",
-    query: { filter: "additionalField2", options: [] },
+    query: { filter: "additionalField3", options: [] },
   },
   {
     name: "Закъснения",
-    query: { filter: "additionalField2", options: [] },
+    query: { filter: "additionalField4", options: [] },
   },
   {
     name: "Общо",
-    query: { filter: "additionalField2", options: [] },
+    query: { filter: "additionalField5", options: [] },
   },
 ];
-const AbsenceGrid = ({ docs, current, setCurrent, fetch, smaller }) => {
+const AbsenceGrid = ({ docs, smaller }) => {
   const tableRef = useRef();
-  const [innerLoading, setInnerLoading] = useState(false);
-
   return (
     <>
       <Scrollbars
-        onUpdate={(values) => {
-          if (fetch)
-            handleUpdate(values, docs, current, setCurrent, innerLoading, setInnerLoading, fetch, {
-              page: current,
-              limit: 10,
-              type: "general",
-              onSuccess: () => setInnerLoading(false),
-            });
-        }}
         ref={tableRef}
         id={"articlesScrollbar"} // change to 93%
         style={{ height: smaller && "86%" }}
@@ -63,21 +52,21 @@ const AbsenceGrid = ({ docs, current, setCurrent, fetch, smaller }) => {
             );
           })}
         </div>
-        {docs?.docs?.map((el, i) => {
+        {docs?.map((el, i) => {
           return (
             <div className="table-body-row" key={el?._id}>
               <div className="row-data !w-[4%]">{i + 1}</div>
               <div className={`row-data !w-[62%]`}>{el?.name || "---"}</div>
               <div className="row-data !w-1/10">
-                <div className="p-2 flex items-center justify-center bg-green-300 w-9/10 font-bold">{el?.excused}</div>
+                <div className="p-2 flex items-center justify-center bg-green-300 w-9/10 font-bold">{el?.excused?.length}</div>
               </div>
               <div className="row-data !w-1/10">
-                <div className="p-2 flex items-center justify-center bg-red-400 w-9/10 font-bold">{el?.unexcused}</div>
+                <div className="p-2 flex items-center justify-center bg-red-400 w-9/10 font-bold">{el?.unexcused?.length}</div>
               </div>
               <div className="row-data !w-1/10">
-                <div className="p-2 flex items-center justify-center bg-gray-200 w-9/10 font-bold">{el?.late}</div>
+                <div className="p-2 flex items-center justify-center bg-gray-200 w-9/10 font-bold">{el?.late?.length}</div>
               </div>
-              <div className={`row-data !w-[4%]`}>{el?.excused + el?.unexcused + el?.late}</div>
+              <div className={`row-data !w-[4%]`}>{el?.excused?.length + el?.unexcused?.length + el?.late?.length}</div>
             </div>
           );
         })}

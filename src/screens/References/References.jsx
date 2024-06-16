@@ -5,7 +5,7 @@ import { useQuery } from "../../hooks/useQuery";
 import Inputs from "../../components/Inputs";
 import GradesGrid from "../../components/Grids/ReferencesGrids/GradesGrid";
 import AbsenceGrid from "../../components/Grids/ReferencesGrids/AbsenceGrid";
-import { getSchoolSubjects, getStudentGrade, getStudentMarks } from "../../actions";
+import { getSchoolSubjects, getStudentAbsences, getStudentGrade, getStudentMarks } from "../../actions";
 import "./styles.scss";
 import moment from "moment";
 import { nanoid } from "@reduxjs/toolkit";
@@ -19,6 +19,7 @@ const References = ({}) => {
   const { type = tabs_menu_items[0], handleUrlChange } = useQuery();
   const { profile, user } = useSelector(({ general }) => general);
   const { studentMarks } = useSelector(({ marks }) => marks) || [];
+  const { studentAbsences } = useSelector(({ absences }) => absences) || [];
   const { currentGrade } = useSelector(({ grades }) => grades) || {};
   const { currentSchool } = useSelector(({ schools }) => schools) || {};
   const [curPage, setCurPage] = useState(2);
@@ -29,8 +30,8 @@ const References = ({}) => {
     (payload) => {
       dispatch(getSchoolSubjects({ schoolId: payload?.schoolId }));
       dispatch(getStudentGrade({ studentId: payload?.studentId }));
-      if (type === "grades") dispatch(getStudentMarks({ studentId: payload?.studentId }));
-      else dispatch(getStudentMarks({ studentId: payload?.studentId }));
+      if (type === "marks") dispatch(getStudentMarks({ studentId: payload?.studentId }));
+      else dispatch(getStudentAbsences({ studentId: payload?.studentId }));
     },
     [dispatch, type]
   );
@@ -92,13 +93,15 @@ const References = ({}) => {
             />
           ) : (
             <AbsenceGrid
-              docs={{
-                docs: [
-                  { name: "БГ и  литература", excused: 10, unexcused: 20, late: 5 },
-                  { name: "Математика", excused: 0, unexcused: 1, late: 3 },
-                  { name: "Физика и астрономия", excused: 0, unexcused: 0, late: 0 },
-                ],
-              }}
+              docs={currentSchool?.subjects?.map((subj) => {
+                const subjAbsences = {
+                  name: subj?.name,
+                  excused: studentAbsences?.slice(0)?.filter((abs) => abs?.subject?.name === subj?.name && abs?.status === 1),
+                  unexcused: studentAbsences?.slice(0)?.filter((abs) => abs?.subject?.name === subj?.name && abs?.status === 2),
+                  late: studentAbsences?.slice(0)?.filter((abs) => abs?.subject?.name === subj?.name && abs?.status === 3),
+                };
+                return subjAbsences;
+              })}
               current={curPage}
               setCurrent={setCurPage}
               fetch={fetch}

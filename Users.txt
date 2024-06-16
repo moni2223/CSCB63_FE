@@ -5,3 +5,6 @@ Password: 1234
 
 Username: parent1 -> parent
 Password: 1234
+
+Username: teacher3 -> teacher
+Password: 1234
