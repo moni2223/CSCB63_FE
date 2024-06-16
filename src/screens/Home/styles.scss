@@ -2,7 +2,7 @@
   @apply w-full flex items-center justify-center p-2 bg-blue-400 rounded-md text-white font-semibold;
 }
 .statistics-container {
-  @apply h-60 w-1/5 flex flex-col justify-center items-end p-2 text-white rounded-md;
+  @apply h-60 w-[360px] flex flex-col justify-center items-end p-2 text-white rounded-md;
   &.blue {
     @apply from-blue-300 to-blue-500 #{!important};
   }

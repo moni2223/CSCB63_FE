@@ -22,12 +22,13 @@ httpClient.interceptors.response.use(
   },
   function (error) {
     store.dispatch(stopLoading());
-    console.log(error);
-    if ([401, 403]?.includes(error.response.status)) {
+    console.log(error, window.location);
+    if ([401, 403]?.includes(error.response.status) && window.location.pathname !== "/login") {
       localStorage.clear();
       window.location.href = "/login";
     } else {
-      const errorMessage = error?.response?.data?.message;
+      console.log(error);
+      const errorMessage = error?.response?.data?.error;
       if (errorMessage) toast.error(errorMessage);
     }
     return Promise.reject(error);

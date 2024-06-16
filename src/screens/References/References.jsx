@@ -1,52 +1,91 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import "./styles.scss";
 import { useQuery } from "../../hooks/useQuery";
 import Inputs from "../../components/Inputs";
 import GradesGrid from "../../components/Grids/ReferencesGrids/GradesGrid";
 import AbsenceGrid from "../../components/Grids/ReferencesGrids/AbsenceGrid";
+import { getSchoolSubjects, getStudentGrade, getStudentMarks } from "../../actions";
+import "./styles.scss";
+import moment from "moment";
+import { nanoid } from "@reduxjs/toolkit";
+
 const References = ({}) => {
-  const tabs_menu_items = ["grades", "absence"];
+  const tabs_menu_items = ["marks", "absence"];
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { type = tabs_menu_items[0], handleUrlChange } = useQuery();
-  const grades = useSelector(({ references }) => references?.grades) || {};
-  const absences = useSelector(({ references }) => references?.absences) || {};
-
+  const { profile, user } = useSelector(({ general }) => general);
+  const { studentMarks } = useSelector(({ marks }) => marks) || [];
+  const { currentGrade } = useSelector(({ grades }) => grades) || {};
+  const { currentSchool } = useSelector(({ schools }) => schools) || {};
   const [curPage, setCurPage] = useState(2);
 
-  //   const fetch = useCallback((payload) => dispatch(getBenefits(payload)), [dispatch, type]);
+  const [child, setChild] = useState(null);
+
+  const fetch = useCallback(
+    (payload) => {
+      dispatch(getSchoolSubjects({ schoolId: payload?.schoolId }));
+      dispatch(getStudentGrade({ studentId: payload?.studentId }));
+      if (type === "grades") dispatch(getStudentMarks({ studentId: payload?.studentId }));
+      else dispatch(getStudentMarks({ studentId: payload?.studentId }));
+    },
+    [dispatch, type]
+  );
 
   useEffect(() => {
-    // fetch({
-    //   page: 1,
-    //   limit: 10,
-    //   onSuccess: (res) => setCurPage(2),
-    // });
-    //TO-DO fetch
-  }, [type]);
+    if (profile?.id) {
+      if (user?.role?.name === "Student") fetch({ studentId: profile?.id, schoolId: profile?.school?.id });
+      if (user?.role?.name === "Parent") setChild(profile?.students?.[0]);
+    }
+  }, [profile, type]);
+
+  useEffect(() => {
+    if (child) fetch({ schoolId: child?.school_id, studentId: child?.id });
+  }, [child]);
 
   return (
     <div className="main-container" style={{ height: "93vh" }}>
       <div className="body-container !p-0 !h-full">
-        <h2 className="inner-title p-3">Справки</h2>
-        <div className="flex w-1/5 border-2 rounded-md m-3">
-          <Inputs.Button text="Оценки" className={`h-10 ${type === "grades" && "selected"}`} style={{ width: "50%" }} onClick={() => handleUrlChange({ type: "grades" })} />
-          <Inputs.Button text="Отсъствия" className={`h-10 ${type === "absence" && "selected"}`} style={{ width: "50%" }} onClick={() => handleUrlChange({ type: "absence" })} />
+        <h2 className="inner-title p-3">
+          Справки - {child?.name || profile?.name} {child && `${currentGrade?.[0]?.id}${currentGrade?.[0]?.grade}`}
+        </h2>
+        <div className="flex items-center w-full justify-between">
+          {user?.role?.name === "Parent" && (
+            <div className={`flex border-2 rounded-md m-3 w-fit`}>
+              {profile?.students?.map((std) => (
+                <Inputs.Button text={std?.name} key={std?.id} className={`h-10 w-fit ${child?.id == std?.id && "green-selected"}`} onClick={() => setChild(std)} />
+              ))}
+            </div>
+          )}
+          <div className="flex w-1/5 border-2 rounded-md m-3">
+            <Inputs.Button text="Оценки" className={`h-10 ${type === "marks" && "selected"}`} style={{ width: "50%" }} onClick={() => handleUrlChange({ type: "marks" })} />
+            <Inputs.Button text="Отсъствия" className={`h-10 ${type === "absence" && "selected"}`} style={{ width: "50%" }} onClick={() => handleUrlChange({ type: "absence" })} />
+          </div>
         </div>
         <div className="w-full h-[84%] overflow-x-auto scrollbar-thin mt-5 pl-3">
-          {type === "grades" ? (
+          {type === "marks" ? (
             <GradesGrid
-              docs={{
-                docs: [
-                  { name: "БГ и  литература", firstSessionGrades: [6, 4, 5, 3], secondSessionGrades: [6, 4, 5, 3], annualGrade: 4 },
-                  { name: "Математика", firstSessionGrades: [2, 3, 2, 4], secondSessionGrades: [6, 4, 5, 3], annualGrade: 3 },
-                  { name: "Физика и астрономия", firstSessionGrades: [6, 5, 5, 4], secondSessionGrades: [6, 4, 5, 3], annualGrade: 5.5 },
-                ],
-              }}
+              docs={currentSchool?.subjects?.map(({ id, name }) => ({
+                id: nanoid(),
+                name,
+                firstSessionMarks: studentMarks
+                  ?.filter((mark) => {
+                    const markDate = moment(mark?.date);
+                    const lastDayOfFeb2024 = moment("2024-02-29T23:59:59");
+                    return mark?.subject?.id === id && (markDate.isBefore(lastDayOfFeb2024.add(1, "days")) || markDate.year() === 2023);
+                  })
+                  ?.sort((a, b) => moment(a.date).diff(moment(b.date))),
+                secondSessionMarks: studentMarks
+                  ?.filter((mark) => {
+                    const markDate = moment(mark?.date);
+                    const startOfMarch2024 = moment("2024-03-01T00:00:00");
+                    return mark?.subject?.id === id && markDate.isSameOrAfter(startOfMarch2024);
+                  })
+                  ?.sort((a, b) => moment(a.date).diff(moment(b.date))),
+              }))}
               current={curPage}
               setCurrent={setCurPage}
               fetch={fetch}

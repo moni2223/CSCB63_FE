@@ -5,6 +5,8 @@ import LoaderGlobal from "../LoaderGlobal";
 import Header from "../Header/Header";
 import Home from "../../screens/Home";
 import References from "../../screens/References";
+import ClassMates from "../../screens/ClassMates";
+import EditProfile from "../../screens/Profile";
 
 function PrivateRoute({ children }) {
   if (!User.isAuthenticated) return <Navigate to="/login" replace />;
@@ -16,13 +18,14 @@ function AuthRoute({ children }) {
   if (User.isAuthenticated) return <Navigate to="/" state={{ from: location }} replace />;
   return children;
 }
+
 const RoutesCamp = () => {
-  const privateRoutes = [
+  const studentRoutes = [
     {
-      path: "/",
+      path: "/classmates",
       element: (
         <PrivateRoute>
-          <Home />
+          <ClassMates />
         </PrivateRoute>
       ),
     },
@@ -34,6 +37,28 @@ const RoutesCamp = () => {
         </PrivateRoute>
       ),
     },
+  ];
+  const profileRoutes = [
+    {
+      path: "/edit-profile",
+      element: (
+        <PrivateRoute>
+          <EditProfile />
+        </PrivateRoute>
+      ),
+    },
+  ];
+  const privateRoutes = [
+    {
+      path: "/",
+      element: (
+        <PrivateRoute>
+          <Home />
+        </PrivateRoute>
+      ),
+    },
+    ...studentRoutes,
+    ...profileRoutes,
   ];
   return (
     <>

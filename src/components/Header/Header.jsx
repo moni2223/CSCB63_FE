@@ -19,7 +19,7 @@ const Header = ({}) => {
         <div className="flex items-center h-full pl-5">
           <div className="header-logo" onClick={() => navigate("/")} />
         </div>
-        <div className={`flex justify-center  ${window.innerWidth < 1300 ? "w-[57%]" : "w-1/2"} h-[95%] pb-1 shadow-custom`}>
+        <div className={`flex justify-center  ${window.innerWidth < 1300 ? "w-[57%]" : "w-1/2"} h-[95%] pb-1`}>
           <div className="flex justify-evenly w-full pl-1 h-12 items-center rounded-md">
             <div className={`flex w-1/5 justify-center items-center h-full text-black cursor-pointer header-element ${location === "/" ? "selected" : null}`} onClick={() => navigate("/")}>
               <div className={`text-center font-medium w-full whitespace-nowrap text-sm header-inner-element  ${location === "/" ? "selected" : null}`}>Дневник</div>
@@ -30,8 +30,8 @@ const Header = ({}) => {
             <div className={`flex w-1/5 justify-center items-center h-full text-black cursor-pointer header-element ${location.includes("/careers") || location?.includes("career") ? "selected" : null}`} onClick={() => navigate("/careers")}>
               <div className={`text-center font-medium text-sm w-full whitespace-nowrap header-inner-element ${location.includes("/careers") || location?.includes("career") ? "selected" : null}`}>Ръководство</div>
             </div>
-            <div className={`flex w-1/5 justify-center items-center h-full text-black cursor-pointer header-element ${location.includes("/careers") || location?.includes("career") ? "selected" : null}`} onClick={() => navigate("/careers")}>
-              <div className={`text-center font-medium text-sm w-full whitespace-nowrap header-inner-element ${location.includes("/careers") || location?.includes("career") ? "selected" : null}`}>Съученици</div>
+            <div className={`flex w-1/5 justify-center items-center h-full text-black cursor-pointer header-element ${location.includes("/classmates") ? "selected" : null}`} onClick={() => navigate("/classmates")}>
+              <div className={`text-center font-medium text-sm w-full whitespace-nowrap header-inner-element ${location.includes("/classmates") ? "selected" : null}`}>Съученици</div>
             </div>
           </div>
         </div>
@@ -57,18 +57,36 @@ const Header = ({}) => {
                     <div className="header-option shadow-md">
                       <div className="flex w-full items-center justify-between px-3">
                         <p className="text-sm font-medium">Редактирай училище </p>
-                        <div className="icon edit w-6 h-6" onClick={() => navigate("/edit-user")} />
+                        <div
+                          className="icon edit w-6 h-6"
+                          onClick={() => {
+                            close();
+                            navigate("/edit-user");
+                          }}
+                        />
                       </div>
                     </div>
                     <div className="header-option shadow-md">
                       <div className="flex w-full items-center justify-between px-3">
                         <p className="text-sm font-medium">Редактирай класове</p>
-                        <div className="icon edit w-6 h-6" onClick={() => navigate("/edit-user")} />
+                        <div
+                          className="icon edit w-6 h-6"
+                          onClick={() => {
+                            navigate("/edit-user");
+                            close();
+                          }}
+                        />
                       </div>
                     </div>
                   </>
                 )}
-                <div className="header-option shadow-md" onClick={() => navigate("/edit-user")}>
+                <div
+                  className="header-option shadow-md"
+                  onClick={() => {
+                    navigate("/edit-profile");
+                    close();
+                  }}
+                >
                   <div className="flex w-full items-center justify-between px-3">
                     <p className="text-sm font-medium">Редактирай профил</p>
                     <div className="icon edit w-6 h-6" />
