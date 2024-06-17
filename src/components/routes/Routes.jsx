@@ -7,6 +7,8 @@ import Home from "../../screens/Home";
 import References from "../../screens/References";
 import ClassMates from "../../screens/ClassMates";
 import EditProfile from "../../screens/Profile";
+import AddMark from "../../screens/References/Operations/AddMark";
+import AddAbsence from "../../screens/References/Operations/AddAbsence";
 
 function PrivateRoute({ children }) {
   if (!User.isAuthenticated) return <Navigate to="/login" replace />;
@@ -38,6 +40,24 @@ const RoutesCamp = () => {
       ),
     },
   ];
+  const teacherRoutes = [
+    {
+      path: "/add-mark",
+      element: (
+        <PrivateRoute>
+          <AddMark />
+        </PrivateRoute>
+      ),
+    },
+    {
+      path: "/add-absence",
+      element: (
+        <PrivateRoute>
+          <AddAbsence />
+        </PrivateRoute>
+      ),
+    },
+  ];
   const profileRoutes = [
     {
       path: "/edit-profile",
@@ -59,6 +79,7 @@ const RoutesCamp = () => {
     },
     ...studentRoutes,
     ...profileRoutes,
+    ...teacherRoutes,
   ];
   return (
     <>

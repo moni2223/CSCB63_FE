@@ -29,7 +29,7 @@ const headerElements = [
     query: { filter: "additionalField4", options: [] },
   },
 ];
-const GradesGrid = ({ docs, current, setCurrent, fetch, smaller }) => {
+const GradesGrid = ({ docs,  smaller }) => {
   const tableRef = useRef();
 
   const checkGrade = (grade) => {

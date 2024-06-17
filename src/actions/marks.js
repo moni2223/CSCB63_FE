@@ -28,4 +28,10 @@ export const getSubjectMarks = (payload) => async (dispatch) => {
   dispatch(setSubjectMarks(data));
   dispatch(stopLoading());
 };
+export const addStudentMark = (payload) => async (dispatch) => {
+  dispatch(startLoading());
+  const { data } = await httpClient.post(`marks/add`, { ...payload });
+  if (payload?.onSuccess) payload?.onSuccess(data);
+  dispatch(stopLoading());
+};
 export default marksSlice.reducer;

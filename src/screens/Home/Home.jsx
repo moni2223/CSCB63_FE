@@ -46,11 +46,8 @@ const Home = () => {
 
   useEffect(() => {
     if (children) fetch({ studentId: children });
-  }, [children]);
-
-  useEffect(() => {
-    if (subject) teachersFetch({ subjectId: subject?.id });
-  }, [subject]);
+    else if (subject) teachersFetch({ subjectId: subject?.id });
+  }, [children, subject]);
 
   const handleHeaderComponent = (role) => {
     switch (role) {

@@ -28,4 +28,10 @@ export const getSubjectAbsences = (payload) => async (dispatch) => {
   dispatch(setSubjectAbsences(data));
   dispatch(stopLoading());
 };
+export const addStudentAbsence = (payload) => async (dispatch) => {
+  dispatch(startLoading());
+  const { data } = await httpClient.post(`attendance/add`, { ...payload });
+  if (payload?.onSuccess) payload?.onSuccess(data);
+  dispatch(stopLoading());
+};
 export default absencesSlice.reducer;

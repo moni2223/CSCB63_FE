@@ -19,7 +19,7 @@ const Header = ({}) => {
         <div className="flex items-center h-full pl-5">
           <div className="header-logo" onClick={() => navigate("/")} />
         </div>
-        <div className={`flex justify-center  ${window.innerWidth < 1300 ? "w-[57%]" : "w-1/2"} h-[95%] pb-1`}>
+        <div className={`flex justify-center  ${window.innerWidth < 1300 ? "w-[57%]" : "w-1/3"} h-[95%] pb-1`}>
           <div className="flex justify-evenly w-full pl-1 h-12 items-center rounded-md">
             <div className={`flex w-1/5 justify-center items-center h-full text-black cursor-pointer header-element ${location === "/" ? "selected" : null}`} onClick={() => navigate("/")}>
               <div className={`text-center font-medium w-full whitespace-nowrap text-sm header-inner-element  ${location === "/" ? "selected" : null}`}>Дневник</div>
@@ -47,10 +47,13 @@ const Header = ({}) => {
                   <p className="text-xs underline">Email: </p>
                   <p className="font-medium text-xs">{profile?.email || User.getUser()?.email}</p>
                 </div>
-                <div className="flex items-center w-full gap-2 justify-center">
-                  <p className="text-xs underline">Phone number: </p>
-                  <p className="font-medium text-xs">+359 {profile?.number || User.getUser()?.number}</p>
-                </div>
+                {["Student", "Parent"].includes(user?.role?.name) && (
+                  <div className="flex items-center w-full gap-2 justify-center">
+                    <p className="text-xs underline">Phone number: </p>
+                    <p className="font-medium text-xs">+359 {profile?.number || User.getUser()?.number}</p>
+                  </div>
+                )}
+
                 {["Principle", "Admin"].includes(profile?.role?.name) && (
                   <>
                     <div className="header-option shadow-md">

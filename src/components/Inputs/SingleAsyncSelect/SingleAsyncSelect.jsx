@@ -59,7 +59,7 @@ const SingleAsyncSelect = forwardRef(({ optionsArray, loadOptions, disabled, onC
   return (
     <div className={`${outerClassName} flex flex-col items-start input-container`} style={outerStyle}>
       {label && (
-        <label className="flex w-full text-sm mb-2 capitalize">
+        <label className={`flex w-full text-sm mb-2 capitalize ${className && "text-red-500"}`}>
           {label} {compulsory && <span className={"pl-2 text-red-500"}>*</span>}
         </label>
       )}
