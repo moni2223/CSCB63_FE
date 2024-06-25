@@ -4,6 +4,7 @@ import { handleUpdate } from "../../../utilities/pagination";
 import "../styles.scss";
 import _ from "lodash";
 import Popup from "reactjs-popup";
+import { useNavigate } from "react-router";
 
 const headerElements = [
   {
@@ -24,7 +25,8 @@ const headerElements = [
   },
 ];
 
-export const ClassMatesGrid = ({ docs, currentStudentId }) => {
+export const ClassMatesGrid = ({ docs, currentStudentId, manage }) => {
+  const navigate = useNavigate();
   const tableRef = useRef();
   return (
     <>
@@ -53,8 +55,9 @@ export const ClassMatesGrid = ({ docs, currentStudentId }) => {
               <div className={`row-data !w-[32%] ${isLoggedUser && "!font-semibold"}`}>
                 <p className="w-3/4 pr-1 break-all">{el?.email || "---"}</p>
               </div>
-              <div className={`row-data !w-[32%] ${isLoggedUser && "!font-semibold"}`}>
+              <div className={`row-data !w-[32%] !justify-between ${isLoggedUser && "!font-semibold"}`}>
                 <p className="w-3/4 pr-1 break-all">+359 {el?.number || "---"}</p>
+                {manage && <div className="icon document w-5 h-5 mr-3" onClick={() => navigate(`/edit-student?studentId=${el?.id}`)} />}
               </div>
             </div>
           );

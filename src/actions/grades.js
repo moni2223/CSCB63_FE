@@ -13,7 +13,7 @@ export const gradesSlice = createSlice({
   initialState,
   reducers: {
     setCurrentGrade: (state, { payload }) => ({ ...state, currentGrade: payload }),
-    setAllGrades: (state, { payload }) => ({ ...state, currentGrade: [...payload] }),
+    setAllGrades: (state, { payload }) => ({ ...state, allGrades: [...payload] }),
     setGradesForTeacher: (state, { payload }) => ({ ...state, gradesForTeacher: [...payload] }),
   },
 });
@@ -30,6 +30,12 @@ export const getAllGrades = (payload) => async (dispatch) => {
   const { data } = await httpClient.get(`grades/list`);
   if (payload) dispatch(setGradesForTeacher(data?.filter((grd) => payload?.includes(grd?.id))));
   else dispatch(setAllGrades(data));
+  dispatch(stopLoading());
+};
+export const editGrade = (payload) => async (dispatch) => {
+  dispatch(startLoading());
+  const { data } = await httpClient.put(`grades/edit/${payload?.id}`, { ...payload?.body });
+  if (payload?.onSuccess) payload?.onSuccess(data);
   dispatch(stopLoading());
 };
 

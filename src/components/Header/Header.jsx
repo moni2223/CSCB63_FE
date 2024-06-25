@@ -1,18 +1,18 @@
 /* eslint-disable */
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-// import { User } from "../../utilities/User";
 import Popup from "reactjs-popup";
-import "./styles.scss";
-import { logoutUser } from "../../actions/general";
+import { logoutUser, openModal } from "../../actions/general";
 import { User } from "../../utilities/User";
+import "./styles.scss";
 
 const Header = ({}) => {
   const location = useLocation().pathname;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { profile, user } = useSelector(({ general }) => general);
+
   return (
     <>
       <div className="flex h-1/10 pt-2 justify-between items-center rounded-md shadow-md">
@@ -27,9 +27,16 @@ const Header = ({}) => {
             <div className={`flex w-1/5 justify-center items-center h-full text-black cursor-pointer header-element ${location === "/references" && "selected"}`} onClick={() => navigate("/references")}>
               <div className={`text-center font-medium w-full whitespace-nowrap text-sm header-inner-element  ${location === "/references" && "selected"}`}>Справки</div>
             </div>
-            {/* <div className={`flex w-1/5 justify-center items-center h-full text-black cursor-pointer header-element ${location.includes("/careers") || location?.includes("career") ? "selected" : null}`} onClick={() => navigate("/careers")}>
-              <div className={`text-center font-medium text-sm w-full whitespace-nowrap header-inner-element ${location.includes("/careers") || location?.includes("career") ? "selected" : null}`}>Ръководство</div>
-            </div> */}
+            {!["Principle", "Teacher", "Admin"].includes(user?.role?.name) && (
+              <div className={`flex w-1/5 justify-center items-center h-full text-black cursor-pointer header-element ${location.includes("/schedule") && "selected"}`} onClick={() => navigate("/schedule")}>
+                <div className={`text-center font-medium text-sm w-full whitespace-nowrap header-inner-element ${location.includes("/schedule") && "selected"}`}>Програма</div>
+              </div>
+            )}
+            {["Principle", "Admin"].includes(user?.role?.name) && (
+              <div className={`flex w-1/5 justify-center items-center h-full text-black cursor-pointer header-element ${location.includes("/teachers") && "selected"}`} onClick={() => navigate("/teachers")}>
+                <div className={`text-center font-medium text-sm w-full whitespace-nowrap header-inner-element ${location.includes("/teachers") && "selected"}`}>Учители</div>
+              </div>
+            )}
             <div className={`flex w-1/5 justify-center items-center h-full text-black cursor-pointer header-element ${location.includes("/classmates") ? "selected" : null}`} onClick={() => navigate("/classmates")}>
               <div className={`text-center font-medium text-sm w-full whitespace-nowrap header-inner-element ${location.includes("/classmates") ? "selected" : null}`}>{["Teacher", "Principle"].includes(user?.role?.name) ? "Ученици" : "Съученици"}</div>
             </div>
@@ -54,21 +61,21 @@ const Header = ({}) => {
                   </div>
                 )}
 
-                {["Principle", "Admin"].includes(profile?.role?.name) && (
+                {["Admin"].includes(user?.role?.name) && (
                   <>
-                    <div className="header-option shadow-md">
+                    <div
+                      className="header-option shadow-md"
+                      onClick={() => {
+                        close();
+                        navigate("/edit-user");
+                      }}
+                    >
                       <div className="flex w-full items-center justify-between px-3">
                         <p className="text-sm font-medium">Редактирай училище </p>
-                        <div
-                          className="icon edit w-6 h-6"
-                          onClick={() => {
-                            close();
-                            navigate("/edit-user");
-                          }}
-                        />
+                        <div className="icon edit w-6 h-6" />
                       </div>
                     </div>
-                    <div className="header-option shadow-md">
+                    {/* <div className="header-option shadow-md">
                       <div className="flex w-full items-center justify-between px-3">
                         <p className="text-sm font-medium">Редактирай класове</p>
                         <div
@@ -78,6 +85,18 @@ const Header = ({}) => {
                             close();
                           }}
                         />
+                      </div>
+                    </div> */}
+                    <div
+                      className="header-option shadow-md"
+                      onClick={() => {
+                        dispatch(openModal());
+                        close();
+                      }}
+                    >
+                      <div className="flex w-full items-center justify-between px-3">
+                        <p className="text-sm font-medium">Избери друго училище</p>
+                        <div className="icon edit w-6 h-6" />
                       </div>
                     </div>
                   </>

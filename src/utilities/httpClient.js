@@ -30,6 +30,7 @@ httpClient.interceptors.response.use(
       console.log(error);
       const errorMessage = error?.response?.data?.error;
       if (errorMessage) toast.error(errorMessage);
+      else toast.error(error?.message);
     }
     return Promise.reject(error);
   }

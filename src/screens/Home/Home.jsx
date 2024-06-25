@@ -2,17 +2,19 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import constants from "../../config/constants";
 import { getStudentGrade } from "../../actions/grades";
-import { getStudentAbsences, getStudentMarks, getSubjectAbsences, getSubjectMarks } from "../../actions";
+import { getAllAbsences, getAllMarks, getStudentAbsences, getStudentMarks, getSubjectAbsences, getSubjectMarks } from "../../actions";
 import _ from "lodash";
 import Inputs from "../../components/Inputs";
 import "./styles.scss";
+import ModalComponent from "../../components/ModalComponent/ModalComponent";
+import Modals from "../../components/ModalComponent/Modals";
 
 const Home = () => {
   const dispatch = useDispatch();
   const { profile, user } = useSelector(({ general }) => general);
   const { currentGrade } = useSelector(({ grades }) => grades) || {};
-  const { studentMarks, subjectMarks } = useSelector(({ marks }) => marks) || [];
-  const { studentAbsences, subjectAbsences } = useSelector(({ absences }) => absences) || [];
+  const { studentMarks, subjectMarks, allMarks } = useSelector(({ marks }) => marks) || [];
+  const { studentAbsences, subjectAbsences, allAbsences } = useSelector(({ absences }) => absences) || [];
 
   const [children, setChildren] = useState(null);
   const [subject, setSubject] = useState(null);
@@ -32,15 +34,17 @@ const Home = () => {
     },
     [dispatch, subject]
   );
+  const principleFetch = useCallback(() => {
+    dispatch(getAllMarks());
+    dispatch(getAllAbsences());
+  }, [dispatch]);
 
   useEffect(() => {
-    if (profile?.id) {
-      if (user?.role?.name === "Parent") setChildren(profile?.students?.[0]?.id);
-      else if (user?.role?.name === "Student") {
-        dispatch(getStudentGrade({ studentId: profile?.id }));
-        dispatch(getStudentMarks({ studentId: profile?.id }));
-        dispatch(getStudentAbsences({ studentId: profile?.studentId }));
-      } else if (user?.role?.name === "Teacher") setSubject(profile?.subjects?.[0]);
+    if (profile?.id || profile?.school) {
+      if (user?.role?.name === "Student") fetch({ studentId: profile?.id });
+      else if (user?.role?.name === "Parent") setChildren(profile?.students?.[0]?.id);
+      else if (user?.role?.name === "Teacher") setSubject(profile?.subjects?.[0]);
+      else if (["Principle", "Admin"].includes(user?.role?.name)) principleFetch();
     }
   }, [profile]);
 
@@ -64,7 +68,11 @@ const Home = () => {
           </>
         );
       case "Principle":
-        return <>{profile?.name}</>;
+        return (
+          <>
+            {profile?.name} - {profile?.school?.name}
+          </>
+        );
       case "Parent":
         return (
           <>
@@ -93,27 +101,21 @@ const Home = () => {
           </div>
         )}
         <div className="w-full flex items-center flex-wrap gap-4 mt-4">
-          {user?.role?.name === "Teacher"
-            ? constants.teacherStatisticsTypes.map(({ label, value, color }) => (
-                <div className={`statistics-container w-[32.3%] bg-gradient-to-r ${color}`}>
-                  <p className="text-4xl font-bold">{value === "grade" ? _.mean(subjectMarks?.map((mark) => Number(mark?.mark))).toFixed(2) : value === "count" ? subjectMarks?.length : subjectAbsences?.length}</p> {label}
-                </div>
-              ))
+          {["Teacher", "Principle", "Admin"].includes(user?.role?.name)
+            ? constants.teacherStatisticsTypes.map(({ label, value, color }) => {
+                const selectedMarks = user?.role?.name === "Teacher" ? subjectMarks?.slice(0) : allMarks?.slice(0)?.filter((mark) => mark?.subject?.school === profile?.school?.id);
+                const selectedAbsences = user?.role?.name === "Teacher" ? subjectAbsences?.slice(0) : allAbsences?.slice(0)?.filter((abs) => abs?.subject?.school === profile?.school?.id);
+                return (
+                  <div className={`statistics-container w-[32.5%] bg-gradient-to-r ${color}`}>
+                    <p className="text-4xl font-bold">{value === "grade" ? _.mean(selectedMarks?.map((mark) => Number(mark?.mark))).toFixed(2) : value === "count" ? selectedMarks?.length : selectedAbsences?.length}</p> {label}
+                  </div>
+                );
+              })
             : constants.statisticsTypes.map(({ label, value, color }) => (
-                <div className={`statistics-container bg-gradient-to-r ${color}`}>
+                <div className={`statistics-container w-[32.5%] bg-gradient-to-r ${color}`}>
                   <p className="text-4xl font-bold">{value === "grade" ? _.mean(studentMarks?.map((mark) => Number(mark?.mark))).toFixed(2) : value === "count" ? studentMarks?.length : studentAbsences?.length}</p> {label}
                 </div>
               ))}
-          {!["Principal", "Teacher"].includes(user?.role?.name) && (
-            <div className="flex flex-col items-center justify-between h-60 w-[38%] shadow-lg rounded-md bg-gradient-to-r from-yellow-200 to-yellow-300 text-white">
-              <h2 className="inner-title !text-2xl mt-4">Класация</h2>
-              <div className="flex flex-col justify-center items-center">
-                <p className="text-5xl font-bold mb-3">7</p>
-                <p className="font-bold opacity-75">Място в паралелката</p>
-              </div>
-              <div className="fake-element" />
-            </div>
-          )}
         </div>
       </div>
     </div>

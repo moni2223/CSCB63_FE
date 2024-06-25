@@ -8,3 +8,9 @@ Password: 1234
 
 Username: teacher3 -> teacher
 Password: 1234
+
+Username:vanilia123 -> principle
+Password:1234
+
+Username:admin123 -> admin
+Password:1234

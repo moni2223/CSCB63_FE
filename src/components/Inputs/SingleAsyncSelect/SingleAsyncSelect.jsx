@@ -73,6 +73,7 @@ const SingleAsyncSelect = forwardRef(({ optionsArray, loadOptions, disabled, onC
         isDisabled={disabled}
         styles={customStyles}
         className={`w-full ${className}`}
+        isClearable
         value={value}
         components={{
           IndicatorSeparator: () => null,

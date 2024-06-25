@@ -6,7 +6,7 @@ import { validations } from "./validations";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
-import { addStudentAbsence, addStudentMark, getAllGrades } from "../../../actions";
+import { addStudentAbsence, addStudentMark, getAllGrades, getSchoolSubjects, getStudentsForSchool } from "../../../actions";
 import { useQuery } from "../../../hooks/useQuery";
 import MarksForm from "../../../components/Forms/MarksForm/MarksForm";
 import _ from "lodash";
@@ -20,6 +20,8 @@ const AddAbsence = () => {
   const { subject } = useQuery();
   const { profile, user } = useSelector(({ general }) => general);
   const { gradesForTeacher } = useSelector(({ grades }) => grades) || {};
+  const { currentSchool } = useSelector(({ schools }) => schools) || {};
+  const { students } = useSelector(({ students }) => students) || {};
 
   const methods = useForm({
     shouldUnregister: false,
@@ -37,7 +39,14 @@ const AddAbsence = () => {
   } = methods;
 
   useEffect(() => {
-    setValue("subject", JSON.parse(subject));
+    if (!subject && (profile?.id || profile?.school)) {
+      dispatch(getStudentsForSchool({ schoolId: profile?.school?.id }));
+      dispatch(getSchoolSubjects({ schoolId: profile?.school?.id }));
+    }
+  }, [profile]);
+
+  useEffect(() => {
+    if (subject) setValue("subject", JSON.parse(subject));
   }, [subject]);
 
   useEffect(() => {
@@ -51,11 +60,11 @@ const AddAbsence = () => {
   const handleAddAbsence = (e) => {
     const payload = {
       date: e?.date || moment().toISOString(),
-      subject_id: e?.subject?.id,
+      subject_id: e?.subject?.value?.id || e?.subject?.id,
       student_id: e?.student?.value?.id,
       status: Number(e?.status?.value),
       onSuccess: (res) => {
-        toast.success("Оценката е добавена успешно!");
+        toast.success("Отсъствието е добавена успешно!");
         navigate(-1);
       },
     };
@@ -71,7 +80,7 @@ const AddAbsence = () => {
         </div>
         <Inputs.Button text="Добави" className={"h-10 w-[130px] mr-4"} selected onClick={handleSubmit((e) => handleAddAbsence(e))} />
       </div>
-      <AbsenceForm control={control} setValue={setValue} errors={errors} register={register} watch={watch} students={_.uniqBy(_.flatMap(gradesForTeacher, "students"), "id")?.map((std) => ({ label: std?.name, value: std }))} />
+      <AbsenceForm control={control} setValue={setValue} errors={errors} register={register} watch={watch} subject={subject} currentSchool={currentSchool} students={user?.role?.name === "Teacher" ? _.uniqBy(_.flatMap(gradesForTeacher, "students"), "id")?.map((std) => ({ label: std?.name, value: std })) : students?.map((std) => ({ label: std?.name, value: std }))} />
     </div>
   );
 };

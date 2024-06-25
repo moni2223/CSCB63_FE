@@ -6,6 +6,7 @@ import { useNavigate } from "react-router";
 import "../styles.scss";
 import _ from "lodash";
 import Popup from "reactjs-popup";
+import Inputs from "../../Inputs";
 
 const headerElements = [
   {
@@ -29,7 +30,7 @@ const headerElements = [
     query: { filter: "additionalField4", options: [] },
   },
 ];
-const TeacherGradesGrid = ({ docs, smaller }) => {
+const TeacherGradesGrid = ({ docs, smaller, deleteMark }) => {
   const tableRef = useRef();
 
   const checkGrade = (grade) => {
@@ -91,9 +92,10 @@ const TeacherGradesGrid = ({ docs, smaller }) => {
                   <div className="flex gap-3 w-9/10 h-full items-center">
                     {el?.firstSessionMarks?.length
                       ? el?.firstSessionMarks?.map((mark) => (
-                          <Popup className="anvil" key={mark?.id} position="top center" trigger={<div className={`rounded-md p-3 h-10 w-10 flex items-center justify-center text-sm cursor-pointer font-semibold ${checkGrade(Number(mark?.mark))}`}>{Number(mark?.mark)?.toFixed(2)}</div>}>
+                          <Popup className="anvil" contentStyle={{ width: 300 }} key={mark?.id} position="top center" trigger={<div className={`rounded-md p-3 h-10 w-10 flex items-center justify-center text-sm cursor-pointer font-semibold ${checkGrade(Number(mark?.mark))}`}>{Number(mark?.mark)?.toFixed(2)}</div>}>
                             <div className="h-full w-full p-3 text-sm">
-                              Добавена на: <b>{moment(mark?.date).format("DD.MM.YYYY")}</b>
+                              Добавена на: <b className="ml-2">{moment(mark?.date).format("DD.MM.YYYY")}</b>
+                              <Inputs.Button className={"delete w-[250px] mt-2"} text={"Премахни"} onClick={() => deleteMark(mark?.id)} />
                             </div>
                           </Popup>
                         ))
@@ -116,9 +118,10 @@ const TeacherGradesGrid = ({ docs, smaller }) => {
                   <div className="flex gap-3 w-9/10 h-full items-center">
                     {el?.secondSessionMarks?.length
                       ? el?.secondSessionMarks?.map((mark) => (
-                          <Popup className="anvil" key={mark?.id} position="top center" trigger={<div className={`rounded-md cursor-pointer p-3 h-10 w-10 flex items-center justify-center text-sm font-semibold ${checkGrade(Number(mark?.mark))}`}>{Number(mark?.mark)?.toFixed(2)}</div>}>
+                          <Popup className="anvil" contentStyle={{ width: 300 }} key={mark?.id} position="top center" trigger={<div className={`rounded-md p-3 h-10 w-10 flex items-center justify-center text-sm cursor-pointer font-semibold ${checkGrade(Number(mark?.mark))}`}>{Number(mark?.mark)?.toFixed(2)}</div>}>
                             <div className="h-full w-full p-3 text-sm">
-                              Добавена на: <b>{moment(mark?.date).format("DD.MM.YYYY")}</b>
+                              Добавена на: <b className="ml-2">{moment(mark?.date).format("DD.MM.YYYY")}</b>
+                              <Inputs.Button className={"delete w-[250px] mt-2"} text={"Премахни"} onClick={() => deleteMark(mark?.id)} />
                             </div>
                           </Popup>
                         ))

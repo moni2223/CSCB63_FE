@@ -5,13 +5,16 @@ import { useQuery } from "../../hooks/useQuery";
 import Inputs from "../../components/Inputs";
 import GradesGrid from "../../components/Grids/ReferencesGrids/GradesGrid";
 import AbsenceGrid from "../../components/Grids/ReferencesGrids/AbsenceGrid";
-import { getAllGrades, getSchoolSubjects, getStudentAbsences, getStudentGrade, getStudentMarks, getStudentsForSchool, getSubjectAbsences, getSubjectMarks } from "../../actions";
+import { deleteStudentMark, getAllAbsences, getAllGrades, getAllMarks, getSchoolSubjects, getStudentAbsences, getStudentGrade, getStudentMarks, getStudentsForSchool, getSubjectAbsences, getSubjectMarks } from "../../actions";
 import "./styles.scss";
 import moment from "moment";
 import { nanoid } from "@reduxjs/toolkit";
 import TeacherGradesGrid from "../../components/Grids/ReferencesGrids/TeacherGradesGrid";
 import _ from "lodash";
 import TeacherAbsenceGrid from "../../components/Grids/ReferencesGrids/TeacherAbsenceGrid";
+import { toast } from "react-toastify";
+import PrincipleGradesGrid from "../../components/Grids/ReferencesGrids/PrincipleGradesGrid";
+import PrincipleAbsenceGrid from "../../components/Grids/ReferencesGrids/PrincipleAbsenceGrid";
 
 const References = ({}) => {
   const tabs_menu_items = ["marks", "absence"];
@@ -21,14 +24,16 @@ const References = ({}) => {
 
   const { type = tabs_menu_items[0], handleUrlChange } = useQuery();
   const { profile, user } = useSelector(({ general }) => general);
-  const { studentMarks, subjectMarks } = useSelector(({ marks }) => marks) || [];
-  const { studentAbsences, subjectAbsences } = useSelector(({ absences }) => absences) || [];
+  const { studentMarks, subjectMarks, allMarks } = useSelector(({ marks }) => marks) || [];
+  const { studentAbsences, subjectAbsences, allAbsences } = useSelector(({ absences }) => absences) || [];
   const { currentGrade, gradesForTeacher } = useSelector(({ grades }) => grades) || {};
   const { currentSchool } = useSelector(({ schools }) => schools) || {};
-  const [curPage, setCurPage] = useState(2);
+  const { students } = useSelector(({ students }) => students) || {};
 
+  const [curPage, setCurPage] = useState(2);
   const [child, setChild] = useState(null);
   const [subject, setSubject] = useState(null);
+  const [filter, setFilter] = useState(null);
 
   const fetch = useCallback(
     (payload) => {
@@ -51,14 +56,18 @@ const References = ({}) => {
     [dispatch, subject]
   );
 
+  const principleFetch = useCallback(() => {
+    dispatch(getAllMarks());
+    dispatch(getAllAbsences());
+    dispatch(getStudentsForSchool({ schoolId: profile?.school?.id }));
+  }, [dispatch, profile]);
+
   useEffect(() => {
-    if (profile?.id) {
+    if (profile?.id || profile?.school) {
       if (user?.role?.name === "Parent") setChild(profile?.students?.[0]?.id);
-      else if (user?.role?.name === "Student") {
-        dispatch(getStudentGrade({ studentId: profile?.id }));
-        dispatch(getStudentMarks({ studentId: profile?.id }));
-        dispatch(getStudentAbsences({ studentId: profile?.studentId }));
-      } else if (user?.role?.name === "Teacher") setSubject(profile?.subjects?.[0]);
+      else if (user?.role?.name === "Student") fetch({ studentId: profile?.id, schoolId: profile?.school?.id });
+      else if (user?.role?.name === "Teacher") setSubject(profile?.subjects?.[0]);
+      else if (["Principle", "Admin"].includes(user?.role?.name)) principleFetch();
     }
   }, [profile]);
 
@@ -75,6 +84,18 @@ const References = ({}) => {
     else if (subject) teachersFetch({ subjectId: subject?.id });
   }, [child, subject]);
 
+  const deleteMark = (id) => {
+    dispatch(
+      deleteStudentMark({
+        id,
+        onSuccess: () => {
+          teachersFetch({ subjectId: subject?.id });
+          toast.success("Оценката е изтрита успешно!");
+        },
+      })
+    );
+  };
+
   return (
     <div className="main-container" style={{ height: "93vh" }}>
       <div className="body-container !p-0 !h-full">
@@ -82,7 +103,7 @@ const References = ({}) => {
           <h2 className="inner-title p-3">
             Справки - {child?.name || profile?.name} {child && `${currentGrade?.[0]?.id}${currentGrade?.[0]?.grade}`}
           </h2>
-          {user?.role?.name === "Teacher" && <Inputs.Button text={"Добави"} selected className={"w-[170px] mr-3"} onClick={() => (type === "marks" ? navigate(`/add-mark?subject=${JSON.stringify(subject)}`) : navigate(`/add-absence?subject=${JSON.stringify(subject)}`))} />}
+          {["Teacher", "Admin"].includes(user?.role?.name) && <Inputs.Button text={"Добави"} selected className={"w-[170px] mr-3"} onClick={() => (type === "marks" ? navigate(`/add-mark${user?.role?.name === "Teacher" ? `?subject=${JSON.stringify(subject)}` : ""}`) : navigate(`/add-absence${user?.role?.name === "Teacher" ? `?subject=${JSON.stringify(subject)}` : ""}`))} />}
         </div>
 
         <div className="flex items-center w-full justify-between">
@@ -104,6 +125,20 @@ const References = ({}) => {
             <Inputs.Button text="Оценки" className={`h-10 ${type === "marks" && "selected"}`} style={{ width: "50%" }} onClick={() => handleUrlChange({ type: "marks" })} />
             <Inputs.Button text="Отсъствия" className={`h-10 ${type === "absence" && "selected"}`} style={{ width: "50%" }} onClick={() => handleUrlChange({ type: "absence" })} />
           </div>
+          {user?.role?.name === "Principle" && (
+            <Inputs.SingleAsyncSelect
+              outerClassName="!w-[400px] mr-4"
+              value={filter}
+              optionsArray={
+                students &&
+                students?.map((std) => ({
+                  label: std?.name,
+                  value: std,
+                }))
+              }
+              onChange={(e) => setFilter(e)}
+            />
+          )}
         </div>
         <div className="w-full h-[84%] overflow-x-auto scrollbar-thin mt-5 pl-3">
           {type === "marks" ? (
@@ -129,7 +164,10 @@ const References = ({}) => {
                       ?.sort((a, b) => moment(a.date).diff(moment(b.date))),
                   };
                 })}
+                deleteMark={deleteMark}
               />
+            ) : ["Principle", "Admin"].includes(user?.role?.name) ? (
+              <PrincipleGradesGrid docs={allMarks?.filter((mark) => mark?.subject?.school === profile?.school?.id)} deleteMark={deleteMark} filter={filter} manage={user?.role?.name === "Admin"} />
             ) : (
               <GradesGrid
                 docs={currentSchool?.subjects?.map(({ id, name }) => {
@@ -169,6 +207,8 @@ const References = ({}) => {
               setCurrent={setCurPage}
               fetch={fetch}
             />
+          ) : ["Principle", "Admin"].includes(user?.role?.name) ? (
+            <PrincipleAbsenceGrid docs={allAbsences?.filter((abs) => abs?.subject?.school === profile?.school?.id)} filter={filter} manage={user?.role?.name === "Admin"} />
           ) : (
             <AbsenceGrid
               docs={currentSchool?.subjects?.map((subj) => {
@@ -180,9 +220,6 @@ const References = ({}) => {
                 };
                 return subjAbsences;
               })}
-              current={curPage}
-              setCurrent={setCurPage}
-              fetch={fetch}
             />
           )}
         </div>

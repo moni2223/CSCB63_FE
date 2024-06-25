@@ -1,15 +1,16 @@
 /* eslint-disable */
 import React, { useEffect } from "react";
 import "./styles.scss";
+import { useSelector } from "react-redux";
+import Modals from "./Modals";
 
-const ModalComponent = ({ children, open, position }) => {
-  // useEffect(() => {
-  //   if (open) {
-  //     document.getElementById("html").style.overflow = "hidden";
-  //     window.scrollTo({ top: 0 });
-  //   } else document.getElementById("html").style.overflow = "auto";
-  // }, [open]);
+const ModalComponent = ({ options }) => {
+  const { modal } = useSelector(({ general }) => general) || null;
 
-  return <div className={`modal-component ${open && "show"} ${position}`}>{children}</div>;
+  return (
+    <div className={`modal-component ${modal?.open && "show"}`}>
+      <Modals.ChooseSchoolModal options={options} />
+    </div>
+  );
 };
 export default ModalComponent;

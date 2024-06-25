@@ -1,10 +1,6 @@
-import { default as DeleteModal } from "./DeleteModal";
-import { default as AcceptModal } from "./AcceptModal";
-import { default as InfoModal } from "./InfoModal";
+import { default as ChooseSchoolModal } from "./ChooseSchoolModal";
 const Modals = {
-  DeleteModal,
-  AcceptModal,
-  InfoModal,
+  ChooseSchoolModal,
 };
 
 export default Modals;
