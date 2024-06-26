@@ -34,7 +34,20 @@ export const getSchools = (payload) => async (dispatch) => {
 export const getCurrentSchool = (payload) => async (dispatch) => {
   dispatch(startLoading());
   const { data } = await httpClient.get(`schools/getSchool/${payload?.schoolId}`);
+  if (payload?.onSuccess) payload?.onSuccess(data);
   dispatch(setCurrentSchoolData(data));
+  dispatch(stopLoading());
+};
+export const addSchool = (payload) => async (dispatch) => {
+  dispatch(startLoading());
+  const { data } = await httpClient.post(`schools/add`, { ...payload });
+  if (payload?.onSuccess) payload?.onSuccess(data);
+  dispatch(stopLoading());
+};
+export const editSchool = (payload) => async (dispatch) => {
+  dispatch(startLoading());
+  const { data } = await httpClient.post(`schools/edit/${payload?.id}`, { ...payload?.body });
+  if (payload?.onSuccess) payload?.onSuccess(data);
   dispatch(stopLoading());
 };
 export const getSchoolSubjects = (payload) => async (dispatch) => {

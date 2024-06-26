@@ -42,8 +42,12 @@ export const getProfile = (user, role) => async (dispatch) => {
     profile = await httpClient.get(`principals/getPrincipalByEmail/${user?.email}`);
     dispatch(setProfile(profile?.data));
   } else {
-    dispatch(setProfile({ school: null }));
-    dispatch(openModal({}));
+    const selectedSchool = localStorage.getItem("selected_school");
+    console.log(selectedSchool);
+    if (!selectedSchool) {
+      dispatch(setProfile({ school: null }));
+      dispatch(openModal({}));
+    } else dispatch(setProfile({ school: JSON.parse(selectedSchool) }));
   }
 };
 
@@ -94,6 +98,7 @@ export const getAllParents = () => async (dispatch) => {
 
 export const updateSelectedAdminSchool = (payload) => async (dispatch) => {
   dispatch(setProfile({ school: { ...payload } }));
+  localStorage.setItem("selected_school", JSON.stringify(payload));
 };
 
 export const logoutUser = (payload) => async (dispatch) => {

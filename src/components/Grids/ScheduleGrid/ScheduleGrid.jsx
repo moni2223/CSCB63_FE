@@ -26,7 +26,7 @@ const headerElements = [
     query: { filter: "friday", options: [] },
   },
 ];
-const ScheduleGrid = ({ docs, smaller }) => {
+const ScheduleGrid = ({ docs, smaller, teachers, noHeight }) => {
   const tableRef = useRef();
 
   const getMaxElementsOfSchedule = () => {
@@ -41,32 +41,31 @@ const ScheduleGrid = ({ docs, smaller }) => {
     return lengths;
   };
 
-  const getTeacher = () => {
-    // return (
-    //   <Popup trigger={<div className="icon info w-4 h-4 mr-3" />} contentStyle={{ width: 200 }} className="anvil" position="bottom right">
-    //     {(close) => {
-    //       return (
-    //         <div className="flex items-center w-full h-full p-2 gap-2 text-sm">
-    //           <p>Учител:</p>
-    //           {docs?.[0]?.schedule?.teacher?.name}
-    //         </div>
-    //       );
-    //     }}
-    //   </Popup>
-    // );
-    return "";
+  const getTeacher = (subject) => {
+    const teachersWithSubject = _.filter(teachers, (teacher) => _.some(teacher.subjects, { id: subject }));
+    return (
+      <Popup trigger={<div className="icon info w-4 h-4 mr-3" />} contentStyle={{ width: 200 }} className="anvil" position="bottom right">
+        {(close) => {
+          return (
+            <div className="flex items-center w-full h-full p-2 gap-2 text-sm">
+              <p>Учител:</p>
+              <b>{teachersWithSubject?.[0]?.name || "Няма зададен"}</b>
+            </div>
+          );
+        }}
+      </Popup>
+    );
   };
 
   const lengths = getMaxElementsOfSchedule();
   const maxDay = _.maxBy(Object.keys(lengths), (day) => lengths[day]);
 
-  console.log(docs, maxDay);
-
+  console.log(docs);
   return (
     <Scrollbars
       ref={tableRef}
-      id={"articlesScrollbar"} // change to 93%
-      style={{ height: smaller && "86%" }}
+      id={!noHeight && "articlesScrollbar"} // change to 93%
+      style={{ height: noHeight && "60vh" }}
       renderView={(props) => <div {...props} style={{ ...props.style, overflowX: "hidden" }} />}
     >
       <div className={`flex w-full p-2 rounded-md`}>
@@ -82,21 +81,21 @@ const ScheduleGrid = ({ docs, smaller }) => {
         return (
           <div className="table-body-row" key={el?._id}>
             <div className={`row-data !w-1/5 !justify-between`}>
-              {docs?.[0]?.schedule?.monday?.[i]?.name || "---"}
-              {docs?.[0]?.schedule?.monday?.[i]?.name && getTeacher()}
+              {docs?.monday?.[i]?.name || "---"}
+              {docs?.monday?.[i]?.name && docs?.student?.id && getTeacher(docs?.monday?.[i]?.id)}
             </div>
             <div className="row-data !w-1/5 !justify-between">
-              {docs?.[0]?.schedule?.tuesday?.[i]?.name || "---"}
-              {docs?.[0]?.schedule?.tuesday?.[i]?.name && getTeacher()}
+              {docs?.tuesday?.[i]?.name || "---"}
+              {docs?.tuesday?.[i]?.name && docs?.student?.id && getTeacher(docs?.tuesday?.[i]?.id)}
             </div>
             <div className="row-data !w-1/5 !justify-between">
-              {docs?.[0]?.schedule?.wednesday?.[i]?.name || "---"} {docs?.[0]?.schedule?.wednesday?.[i]?.name && getTeacher()}
+              {docs?.wednesday?.[i]?.name || "---"} {docs?.wednesday?.[i]?.name && docs?.student?.id && getTeacher(docs?.wednesday?.[i]?.id)}
             </div>
             <div className="row-data !w-1/5 !justify-between">
-              {docs?.[0]?.schedule?.thursday?.[i]?.name || "---"} {docs?.[0]?.schedule?.thursday?.[i]?.name && getTeacher()}
+              {docs?.thursday?.[i]?.name || "---"} {docs?.thursday?.[i]?.name && docs?.student?.id && getTeacher(docs?.thursday?.[i]?.id)}
             </div>
             <div className={`row-data !w-1/5 !justify-between`}>
-              {docs?.[0]?.schedule?.friday?.[i]?.name || "---"} {docs?.[0]?.schedule?.friday?.[i]?.name && getTeacher()}
+              {docs?.friday?.[i]?.name || "---"} {docs?.friday?.[i]?.name && docs?.student?.id && getTeacher(docs?.friday?.[i]?.id)}
             </div>
           </div>
         );

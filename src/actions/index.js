@@ -6,6 +6,7 @@ import grades from "./grades";
 import marks from "./marks";
 import schools from "./schools";
 import absences from "./absences";
+import schedules from "./schedules";
 
 export * from "./students";
 export * from "./general";
@@ -13,6 +14,7 @@ export * from "./grades";
 export * from "./marks";
 export * from "./schools";
 export * from "./absences";
+export * from "./schedules";
 
 const store = configureStore({
   reducer: {
@@ -22,6 +24,7 @@ const store = configureStore({
     marks,
     schools,
     absences,
+    schedules,
   },
 
   middleware: (getDefaultMiddleware) =>

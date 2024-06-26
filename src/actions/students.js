@@ -51,8 +51,16 @@ export const getStudentsForSchool = (payload) => async (dispatch) => {
 };
 export const getStudentSchedule = (payload) => async (dispatch) => {
   dispatch(startLoading());
-  const { data } = await httpClient.get(`/students/getSchedule/${payload?.studentId}`);
-  dispatch(setSchedule(data));
+  const { data } = await httpClient.get(`/schedule/listBySchool/${payload?.schoolId}`);
+  // console.log(data);
+  dispatch(setSchedule(data?.find((sch) => sch?.student?.id === payload?.studentId)));
   dispatch(stopLoading());
 };
+export const getTeacherSchedule = (payload) => async (dispatch) => {
+  dispatch(startLoading());
+  const { data } = await httpClient.get(`/schedule/listBySchool/${payload?.schoolId}`);
+  // console.log(data);
+  dispatch(setSchedule(data?.find((sch) => sch?.teacher?.id === payload?.teacherId)));
+  dispatch(stopLoading());
+}
 export default studentsSlice.reducer;

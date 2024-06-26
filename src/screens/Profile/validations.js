@@ -6,5 +6,9 @@ export const loginValidations = Yup.object().shape({
   password: Yup.string().label("password"),
   number: Yup.string().required().min(3).label("number"),
 });
+export const schoolValidations = Yup.object().shape({
+  name: Yup.string().required().min(3).label("name"),
+  address: Yup.string().required().min(3).label("address"),
+});
 
-export const validations = loginValidations;
+export const validations = { loginValidations, schoolValidations };

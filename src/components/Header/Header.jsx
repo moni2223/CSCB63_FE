@@ -27,11 +27,11 @@ const Header = ({}) => {
             <div className={`flex w-1/5 justify-center items-center h-full text-black cursor-pointer header-element ${location === "/references" && "selected"}`} onClick={() => navigate("/references")}>
               <div className={`text-center font-medium w-full whitespace-nowrap text-sm header-inner-element  ${location === "/references" && "selected"}`}>Справки</div>
             </div>
-            {!["Principle", "Teacher", "Admin"].includes(user?.role?.name) && (
-              <div className={`flex w-1/5 justify-center items-center h-full text-black cursor-pointer header-element ${location.includes("/schedule") && "selected"}`} onClick={() => navigate("/schedule")}>
-                <div className={`text-center font-medium text-sm w-full whitespace-nowrap header-inner-element ${location.includes("/schedule") && "selected"}`}>Програма</div>
-              </div>
-            )}
+            {/* {!["Principle", "Teacher", "Admin"].includes(user?.role?.name) && ( */}
+            <div className={`flex w-1/5 justify-center items-center h-full text-black cursor-pointer header-element ${location.includes("/schedule") && "selected"}`} onClick={() => navigate("/schedule")}>
+              <div className={`text-center font-medium text-sm w-full whitespace-nowrap header-inner-element ${location.includes("/schedule") && "selected"}`}>Програма</div>
+            </div>
+            {/* )} */}
             {["Principle", "Admin"].includes(user?.role?.name) && (
               <div className={`flex w-1/5 justify-center items-center h-full text-black cursor-pointer header-element ${location.includes("/teachers") && "selected"}`} onClick={() => navigate("/teachers")}>
                 <div className={`text-center font-medium text-sm w-full whitespace-nowrap header-inner-element ${location.includes("/teachers") && "selected"}`}>Учители</div>
@@ -67,7 +67,7 @@ const Header = ({}) => {
                       className="header-option shadow-md"
                       onClick={() => {
                         close();
-                        navigate("/edit-user");
+                        navigate(`/edit-school`);
                       }}
                     >
                       <div className="flex w-full items-center justify-between px-3">

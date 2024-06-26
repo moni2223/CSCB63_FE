@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import Inputs from "../../Inputs";
 import { useDispatch, useSelector } from "react-redux";
 import { closeModal, getSchools, updateSelectedAdminSchool } from "../../../actions";
+import { useNavigate } from "react-router";
 
 const ChooseSchoolModal = ({ handleClose, options }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [selected, setSelected] = useState(null);
 
   const { schools } = useSelector(({ schools }) => schools);
@@ -33,15 +35,25 @@ const ChooseSchoolModal = ({ handleClose, options }) => {
           }
           onChange={(e) => setSelected(e)}
         />
-        <Inputs.Button
-          text={"Запази"}
-          className={"selected w-full mt-4"}
-          disabled={!selected}
-          onClick={() => {
-            dispatch(updateSelectedAdminSchool(selected?.value));
-            dispatch(closeModal());
-          }}
-        />
+        <div className="w-full flex items-center gap-4">
+          <Inputs.Button
+            text={"Добави ново"}
+            className={"green-selected w-full mt-4"}
+            onClick={() => {
+              navigate("/add-school");
+              dispatch(closeModal());
+            }}
+          />
+          <Inputs.Button
+            text={"Запази"}
+            className={"selected w-full mt-4"}
+            disabled={!selected}
+            onClick={() => {
+              dispatch(updateSelectedAdminSchool(selected?.value));
+              dispatch(closeModal());
+            }}
+          />
+        </div>
       </div>
     </div>
   );

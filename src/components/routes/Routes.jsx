@@ -19,6 +19,9 @@ import ModalComponent from "../ModalComponent/ModalComponent";
 import AddTeacher from "../../screens/Teachers/Operations/AddTeacher";
 import EditTeacher from "../../screens/Teachers/Operations/EditTeacher";
 import EditStudent from "../../screens/ClassMates/EditStudent";
+import AddSchool from "../../screens/Profile/AddSchool";
+import EditSchool from "../../screens/Profile/EditSchool";
+import AddSchedule from "../../screens/Schedule/Operations/AddSchedule";
 
 function PrivateRoute({ children }) {
   if (!User.isAuthenticated) return <Navigate to="/login" replace />;
@@ -128,16 +131,6 @@ const RoutesCamp = () => {
         </PrivateRoute>
       ),
     },
-  ];
-  const privateRoutes = [
-    {
-      path: "/",
-      element: (
-        <PrivateRoute>
-          <Home />
-        </PrivateRoute>
-      ),
-    },
     {
       path: "/add-student",
       element: (
@@ -151,6 +144,40 @@ const RoutesCamp = () => {
       element: (
         <PrivateRoute>
           <EditStudent />
+        </PrivateRoute>
+      ),
+    },
+  ];
+  const privateRoutes = [
+    {
+      path: "/",
+      element: (
+        <PrivateRoute>
+          <Home />
+        </PrivateRoute>
+      ),
+    },
+    {
+      path: "/add-school",
+      element: (
+        <PrivateRoute>
+          <AddSchool />
+        </PrivateRoute>
+      ),
+    },
+    {
+      path: "/edit-school",
+      element: (
+        <PrivateRoute>
+          <EditSchool />
+        </PrivateRoute>
+      ),
+    },
+    {
+      path: "/add-schedule",
+      element: (
+        <PrivateRoute>
+          <AddSchedule />
         </PrivateRoute>
       ),
     },
