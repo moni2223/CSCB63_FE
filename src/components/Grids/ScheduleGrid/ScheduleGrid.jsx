@@ -3,6 +3,7 @@ import Scrollbars from "react-custom-scrollbars-2";
 import _ from "lodash";
 import Popup from "reactjs-popup";
 import "../styles.scss";
+import EmptyStateComponent from "../../EmptyStateComponent/EmptyStateComponent";
 
 const headerElements = [
   {
@@ -62,45 +63,51 @@ const ScheduleGrid = ({ docs, smaller, teachers, noHeight }) => {
 
   console.log(docs);
   return (
-    <Scrollbars
-      ref={tableRef}
-      id={!noHeight && "articlesScrollbar"} // change to 93%
-      style={{ height: noHeight && "60vh" }}
-      renderView={(props) => <div {...props} style={{ ...props.style, overflowX: "hidden" }} />}
-    >
-      <div className={`flex w-full p-2 rounded-md`}>
-        {headerElements?.map((header) => {
-          return (
-            <div className={`w-1/5 flex`} key={header.query.filter}>
-              <div className="font-normal text-xs w-[76%]">{header.name}</div>
-            </div>
-          );
-        })}
-      </div>
-      {new Array(7).fill("-")?.map((el, i) => {
-        return (
-          <div className="table-body-row" key={el?._id}>
-            <div className={`row-data !w-1/5 !justify-between`}>
-              {docs?.monday?.[i]?.name || "---"}
-              {docs?.monday?.[i]?.name && docs?.student?.id && getTeacher(docs?.monday?.[i]?.id)}
-            </div>
-            <div className="row-data !w-1/5 !justify-between">
-              {docs?.tuesday?.[i]?.name || "---"}
-              {docs?.tuesday?.[i]?.name && docs?.student?.id && getTeacher(docs?.tuesday?.[i]?.id)}
-            </div>
-            <div className="row-data !w-1/5 !justify-between">
-              {docs?.wednesday?.[i]?.name || "---"} {docs?.wednesday?.[i]?.name && docs?.student?.id && getTeacher(docs?.wednesday?.[i]?.id)}
-            </div>
-            <div className="row-data !w-1/5 !justify-between">
-              {docs?.thursday?.[i]?.name || "---"} {docs?.thursday?.[i]?.name && docs?.student?.id && getTeacher(docs?.thursday?.[i]?.id)}
-            </div>
-            <div className={`row-data !w-1/5 !justify-between`}>
-              {docs?.friday?.[i]?.name || "---"} {docs?.friday?.[i]?.name && docs?.student?.id && getTeacher(docs?.friday?.[i]?.id)}
-            </div>
+    <>
+      {docs ? (
+        <Scrollbars
+          ref={tableRef}
+          id={!noHeight && "articlesScrollbar"} // change to 93%
+          style={{ height: noHeight && "60vh" }}
+          renderView={(props) => <div {...props} style={{ ...props.style, overflowX: "hidden" }} />}
+        >
+          <div className={`flex w-full p-2 rounded-md`}>
+            {headerElements?.map((header) => {
+              return (
+                <div className={`w-1/5 flex`} key={header.query.filter}>
+                  <div className="font-normal text-xs w-[76%]">{header.name}</div>
+                </div>
+              );
+            })}
           </div>
-        );
-      })}
-    </Scrollbars>
+          {new Array(7).fill("-")?.map((el, i) => {
+            return (
+              <div className="table-body-row" key={el?._id}>
+                <div className={`row-data !w-1/5 !justify-between`}>
+                  {docs?.monday?.[i]?.name || "---"}
+                  {docs?.monday?.[i]?.name && docs?.student?.id && getTeacher(docs?.monday?.[i]?.id)}
+                </div>
+                <div className="row-data !w-1/5 !justify-between">
+                  {docs?.tuesday?.[i]?.name || "---"}
+                  {docs?.tuesday?.[i]?.name && docs?.student?.id && getTeacher(docs?.tuesday?.[i]?.id)}
+                </div>
+                <div className="row-data !w-1/5 !justify-between">
+                  {docs?.wednesday?.[i]?.name || "---"} {docs?.wednesday?.[i]?.name && docs?.student?.id && getTeacher(docs?.wednesday?.[i]?.id)}
+                </div>
+                <div className="row-data !w-1/5 !justify-between">
+                  {docs?.thursday?.[i]?.name || "---"} {docs?.thursday?.[i]?.name && docs?.student?.id && getTeacher(docs?.thursday?.[i]?.id)}
+                </div>
+                <div className={`row-data !w-1/5 !justify-between`}>
+                  {docs?.friday?.[i]?.name || "---"} {docs?.friday?.[i]?.name && docs?.student?.id && getTeacher(docs?.friday?.[i]?.id)}
+                </div>
+              </div>
+            );
+          })}
+        </Scrollbars>
+      ) : (
+        <EmptyStateComponent text={"Няма намерена програма"} />
+      )}
+    </>
   );
 };
 

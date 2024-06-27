@@ -90,30 +90,33 @@ const Schedule = () => {
               onChange={(e) => setFilter(e)}
             />
           )}
-          <div className="flex items-center gap-4">
-            {filter && <Inputs.Button className={"w-[170px] h-10 delete"} text={"Изтрий"} onClick={() => handleDeleteSchedule()} />}
-            <Popup
-              className="anvil"
-              position="bottom center"
-              trigger={
-                <div className={`flex items-center justify-center text-black text-sm cursor-pointer rounded-md bg-white px-5 button-container active:scale-95 selected w-[170px] h-10`}>
-                  <b className="flex" style={{ textTransform: "uppercase", whiteSpace: "nowrap" }}>
-                    Добави
-                  </b>
+
+          {user?.role?.name === "Admin" && (
+            <div className="flex items-center gap-4">
+              {filter && <Inputs.Button className={"w-[170px] h-10 delete"} text={"Изтрий"} onClick={() => handleDeleteSchedule()} />}
+              <Popup
+                className="anvil"
+                position="bottom center"
+                trigger={
+                  <div className={`flex items-center justify-center text-black text-sm cursor-pointer rounded-md bg-white px-5 button-container active:scale-95 selected w-[170px] h-10`}>
+                    <b className="flex" style={{ textTransform: "uppercase", whiteSpace: "nowrap" }}>
+                      Добави
+                    </b>
+                  </div>
+                }
+              >
+                <div className="w-full p-4">
+                  <p className="text-sm">Моля изберете:</p>
+                  <div className="w-full font-bold my-5 cursor-pointer" onClick={() => navigate(`/add-schedule?type=teacher`)}>
+                    Учител {`->`}
+                  </div>
+                  <div className="w-full font-bold cursor-pointer" onClick={() => navigate(`/add-schedule?type=student`)}>
+                    Ученик {`->`}
+                  </div>
                 </div>
-              }
-            >
-              <div className="w-full p-4">
-                <p className="text-sm">Моля изберете:</p>
-                <div className="w-full font-bold my-5 cursor-pointer" onClick={() => navigate(`/add-schedule?type=teacher`)}>
-                  Учител {`->`}
-                </div>
-                <div className="w-full font-bold cursor-pointer" onClick={() => navigate(`/add-schedule?type=student`)}>
-                  Ученик {`->`}
-                </div>
-              </div>
-            </Popup>
-          </div>
+              </Popup>
+            </div>
+          )}
         </div>
 
         {["Admin", "Principle"].includes(user?.role?.name) ? <ScheduleGrid docs={allSchedules?.find((sch) => sch?.id === filter?.value?.id)} teachers={teachers} /> : <ScheduleGrid docs={schedule} teachers={teachers} />}
